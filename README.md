@@ -54,6 +54,7 @@ the tools will create:
 - `.sql` 2 files, tools will create `-up.sql` and `-down.sql`
 
 `up` is a script file for upgrade the database
+
 `down` is a script file for downgrade the database (rollback), reverse step from `up`
 
 ### Upgrade database
