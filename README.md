@@ -14,6 +14,7 @@ Create a file `database.json` in your root project
 {
     "dev": { // Environment name
         "driver"  : "mysql",
+        "host"    : "[mysql_server_address]",
         "user"    : "[username]",
         "password": "[password]",
         "database": "[database_name]"
