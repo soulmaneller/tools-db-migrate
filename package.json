@@ -1,6 +1,6 @@
 {
   "name": "tools-db-migrate",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Description",
   "main": "index.js",
   "scripts": {
