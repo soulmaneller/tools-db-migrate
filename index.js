@@ -13,14 +13,80 @@ if (require.main === module) {
     program
         .version( pkg.version )
         .usage( '[options]' )
+        .option( '-e, --env [environment_name]', `Environment name [Default: 'test']` )
         .option( '-f, --file [config_path]', `Config file path [Default: './database.json']` )
         .option( '-c, --config [config_object]', `Config json object` )
-        .option( '-p, --path [data_path]', `Data path for config object` )
-        .parse( process.argv );
+        .option( '-p, --path [data_path]', `Data path for config object` );
 
-    let configPath = program.file || 'database.json';
-    let dataPath = program.path;
+    program
+        .command( 'up [count] [scope]')
+        .description( 'Upgrade database' )
+        .action( migrate( 'up' ));
+
+    program
+        .command( 'down [count] [scope]')
+        .description( 'Downgrade database' )
+        .action( migrate( 'down' ));
+
+    program.parse( process.argv );
+
+    if( program.args > 0 ) {
+        return;
+    }
+    const config = getConfig( program );
+    let opts = {
+        migrationPath: 'migrations',
+        config: config
+    };
+
+    question.ask( opts ).then(( ans ) => {
+        if( !ans.confirm ) {
+            return;
+        }
+
+        ans = _.get.bind( null, ans );
+        migrate( ans.method, config, ans( 'env', null ))( ans( "name", undefined ), ans( "scope", undefined ));
+    });
+} else {
+    module.exports = require( './lib/dbm' );
+}
+
+function migrate( method, conf, env ) {
+    return ( name, scope ) => {
+        const opts      = this.parent || this;
+        const config    = conf || getConfig( opts );
+
+        const dbmOpts   = {
+            env: env || opts.env || 'test'
+        };
+
+        const dbm       = require( './lib/dbm' )( config, dbmOpts );
+        let params = [
+            ( err ) => {
+                if( err ) {
+                    console.log( `${ chalk.red( '>') } Error:` );
+                    console.log( err.message );
+                    return;
+                }
+                console.log( chalk.green( 'success!' ));
+            }
+        ];
+
+        params.unshift( name, scope );
+
+        if( method === 'reset' ) {
+            params.shift();
+        }
+
+        dbm[ method ].apply( null, params );
+    };
+}
+
+function getConfig( p ) {
+    let configPath = p.file || 'database.json';
+    let dataPath = p.path;
     let config;
+
     if( configPath ) {
         let ext = path.extname( configPath );
 
@@ -40,45 +106,5 @@ if (require.main === module) {
     if( dataPath ) {
         config = _.get( config, dataPath, null );
     }
-
-    let opts = {
-        migrationPath: 'migrations',
-        config: config
-    };
-
-    question.ask( opts ).then(( ans ) => {
-        if( !ans.confirm ) {
-            return;
-        }
-
-        let dbmOpts = {
-            env: ans.env || 'dev',
-        };
-
-        const dbm       = require( './lib/dbm' )( config, dbmOpts );
-        const method    = ans.method;
-        const name      = ans.name || undefined;
-        const scope     = ans.scope || undefined;
-
-        let params = [
-            ( err ) => {
-                if( err ) {
-                    console.log( `${ chalk.red( '>') } Error:` );
-                    console.log( err.message );
-                    return;
-                }
-                console.log( chalk.green( 'success!' ));
-            }
-        ];
-
-        params.unshift( name, scope );
-
-        if( method === 'reset' ) {
-            params.shift();
-        }
-
-        dbm[ method ].apply( null, params );
-    });
-} else {
-    module.exports = require( './lib/dbm' );
+    return config;
 }
