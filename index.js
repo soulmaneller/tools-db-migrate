@@ -30,7 +30,7 @@ if (require.main === module) {
 
     program.parse( process.argv );
 
-    if( program.args > 0 ) {
+    if( program.args.length > 0 ) {
         return;
     }
     const config = getConfig( program );
