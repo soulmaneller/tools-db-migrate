@@ -55,7 +55,6 @@ function migrate( method, conf, env ) {
     return function( name, scope ) {
         const opts      = this.parent || this;
         const config    = conf || getConfig( opts );
-
         const dbmOpts   = {
             env: env || opts.env || 'test'
         };
@@ -83,8 +82,8 @@ function migrate( method, conf, env ) {
 }
 
 function getConfig( p ) {
-    let configPath = p.file || 'database.json';
-    let dataPath = p.path;
+    let configPath  = p.file || p.option( 'file' ) || 'database.json';
+    let dataPath    = p.path || p.option( 'path' );
     let config;
 
     if( configPath ) {
@@ -104,7 +103,11 @@ function getConfig( p ) {
     }
 
     if( dataPath ) {
-        config = _.get( config, dataPath, null );
+        if( typeof config === 'function' ) {
+            config = config( dataPath );
+        } else {
+            config = _.get( config, dataPath, null );
+        }
     }
     return config;
 }
