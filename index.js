@@ -52,7 +52,7 @@ if (require.main === module) {
 }
 
 function migrate( method, conf, env ) {
-    return ( name, scope ) => {
+    return function( name, scope ) {
         const opts      = this.parent || this;
         const config    = conf || getConfig( opts );
 
