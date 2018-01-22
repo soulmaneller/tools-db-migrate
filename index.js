@@ -33,6 +33,7 @@ if (require.main === module) {
     if( program.args.length > 0 ) {
         return;
     }
+
     const config = getConfig( program );
     let opts = {
         migrationPath: 'migrations',
@@ -54,7 +55,7 @@ if (require.main === module) {
 function migrate( method, conf, env ) {
     return function( name, scope ) {
         const opts      = this.parent || this;
-        const config    = conf || getConfig( opts );
+        const config    = conf || getConfig( getOptions( opts, [ 'file', 'path' ]));
         const dbmOpts   = {
             env: env || opts.env || 'test'
         };
@@ -82,8 +83,8 @@ function migrate( method, conf, env ) {
 }
 
 function getConfig( p ) {
-    let configPath  = p.file || p.option( 'file' ) || 'database.json';
-    let dataPath    = p.path || p.option( 'path' );
+    let configPath  = p.file || 'database.json';
+    let dataPath    = p.path;
     let config;
 
     if( configPath ) {
@@ -110,4 +111,12 @@ function getConfig( p ) {
         }
     }
     return config;
+}
+
+function getOptions( opts, list ) {
+    let output = {};
+    list.forEach(( item ) => {
+        output[ item ] = opts.option( item );
+    });
+    return output;
 }
