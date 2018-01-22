@@ -46,7 +46,7 @@ if (require.main === module) {
         }
 
         ans = _.get.bind( null, ans );
-        migrate( ans.method, config, ans( 'env', null ))( ans( "name", undefined ), ans( "scope", undefined ));
+        migrate( ans( 'method' ), config, ans( 'env', null ) || program.env )( ans( "name", undefined ), ans( "scope", undefined ));
     });
 } else {
     module.exports = require( './lib/dbm' );
@@ -54,7 +54,7 @@ if (require.main === module) {
 
 function migrate( method, conf, env ) {
     return function( name, scope ) {
-        const opts      = this.parent || this;
+        const opts      = this ? ( this.parent || this ) : {};
         const config    = conf || getConfig( getOptions( opts, [ 'file', 'path' ]));
         const dbmOpts   = {
             env: env || opts.env || 'test'
@@ -115,6 +115,10 @@ function getConfig( p ) {
 
 function getOptions( opts, list ) {
     let output = {};
+    if( !opts.hasOwnProperty( 'option' ) || typeof opts.option !== 'function' ) {
+        throw new Error( `Please check commander options` );
+    }
+
     list.forEach(( item ) => {
         output[ item ] = opts.option( item );
     });
