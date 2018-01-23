@@ -115,7 +115,7 @@ function getConfig( p ) {
 
 function getOptions( opts, list ) {
     let output = {};
-    if( !opts.hasOwnProperty( 'option' ) || typeof opts.option !== 'function' ) {
+    if( opts.hasOwnProperty( 'option' ) && typeof opts.option !== 'function' ) {
         throw new Error( `Please check commander options` );
     }
 
