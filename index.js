@@ -13,7 +13,7 @@ if (require.main === module) {
     program
         .version( pkg.version )
         .usage( '[options]' )
-        .option( '-e, --env [environment_name]', `Environment name [Default: 'test']` )
+        .option( '-e, --env [environment_name]', `Environment name [Default: 'dev']` )
         .option( '-f, --file [config_path]', `Config file path [Default: './database.json']` )
         .option( '-c, --config [config_object]', `Config json object` )
         .option( '-p, --path [data_path]', `Data path for config object` );
@@ -57,7 +57,7 @@ function migrate( method, conf, env ) {
         const opts      = this ? ( this.parent || this ) : {};
         const config    = conf || getConfig( opts );
         const dbmOpts   = {
-            env: env || opts.env || 'test'
+            env: env || opts.env || 'dev'
         };
 
         const dbm       = require( './lib/dbm' )( config, dbmOpts );
