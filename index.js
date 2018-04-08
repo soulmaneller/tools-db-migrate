@@ -95,9 +95,12 @@ function getConfig( p ) {
             config = require( `./${ targetPath }` );
         } else if( ext === '.json' ) {
             if( fs.existsSync( configPath ) === false ) {
-                throw new Error( `File ${ configPath } not exists` );
+                console.log( `File ${ chalk.yellow( configPath )} not exists` );
+                config = { dev: {} };
+                //throw new Error( `File ${ configPath } not exists` );
+            } else {
+                config = fs.readJsonSync( configPath );
             }
-            config = fs.readJsonSync( configPath );
         } else {
             throw new Error( `Extension of config file is incorrect` );
         }
