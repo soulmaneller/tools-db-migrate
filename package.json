@@ -1,6 +1,6 @@
 {
   "name": "@soulmaneller-dev/tools-db-migrate",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Description",
   "main": "index.js",
   "scripts": {
