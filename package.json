@@ -1,5 +1,5 @@
 {
-  "name": "tools-db-migrate",
+  "name": "@soulmaneller-dev/tools-db-migrate",
   "version": "0.0.15",
   "description": "Description",
   "main": "index.js",
@@ -8,7 +8,7 @@
     "test": "mocha directory",
     "db-migrate": "db-migrate",
     "start": "node index.js",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags && npm publish"
   },
   "license": "ISC",
   "keywords": [],
@@ -27,5 +27,6 @@
     "inquirer-autocomplete-prompt": "^0.12.1",
     "lodash": "^4.17.4"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "repository": "https://github.com/soulmaneller/tools-db-migrate"
 }
