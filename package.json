@@ -3,6 +3,9 @@
   "version": "0.0.16",
   "description": "Description",
   "main": "index.js",
+  "engines": {
+    "npm": "~8.10.0"
+  },
   "scripts": {
     "watch": "watch 'command' 'directory'",
     "test": "mocha directory",
@@ -11,7 +14,15 @@
     "postversion": "git push && git push --tags && npm publish"
   },
   "license": "ISC",
-  "keywords": [],
+  "keywords": [
+    "tools",
+    "mysql",
+    "datbase",
+    "migration",
+    "migrate",
+    "nodejs",
+    "node"
+  ],
   "bin": {
     "tools-db-migrate": "./index.js"
   },
@@ -28,5 +39,8 @@
     "lodash": "^4.17.4"
   },
   "devDependencies": {},
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": "https://github.com/soulmaneller/tools-db-migrate"
 }

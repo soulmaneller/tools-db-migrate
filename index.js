@@ -84,10 +84,16 @@ function migrate( method, conf, env ) {
 
 function getConfig( p ) {
     let configPath  = p.file || 'database.json';
-    let dataPath    = p.path;
-    let config;
+    let dataPath    = p.path || null;
+    let config      = p.config || null;
 
-    if( configPath ) {
+    try {
+        config = JSON.parse( config );
+    } catch( e ) {
+        config = null;
+    }
+
+    if( config === null ) {
         let ext = path.extname( configPath );
 
         if( ext === '.js' ) {
@@ -99,7 +105,11 @@ function getConfig( p ) {
                 config = { dev: {} };
                 //throw new Error( `File ${ configPath } not exists` );
             } else {
-                config = fs.readJsonSync( configPath );
+                try {
+                    config = fs.readJsonSync( configPath );
+                } catch( e ) {
+                    throw e;
+                }
             }
         } else {
             throw new Error( `Extension of config file is incorrect` );
