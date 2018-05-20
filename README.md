@@ -1,3 +1,9 @@
+[![npm](https://img.shields.io/npm/v/@soulmaneller-dev/tools-db-migrate.svg)](https://www.npmjs.com/package/@soulmaneller-dev/tools-db-migrate)
+
+This module for managing database migrations of MySQL.
+This will make you safe from running MySQL scripts and help you for rolling version of database back.
+
+
 # How to use
 
 ## Installation
